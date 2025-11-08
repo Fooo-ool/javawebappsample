@@ -28,7 +28,6 @@ node {
       def resourceGroup = 'jenkins-get-started-rg'
       def webAppName   = 'jiajin-cc8'
       
-      // ✅ 用你创建的 Service Principal 凭据 ID
       withCredentials([usernamePassword(
         credentialsId: 'AzureServicePrincipal', 
         usernameVariable: 'AZURE_CLIENT_ID', 
@@ -42,7 +41,15 @@ node {
         '''
       }
 
-      // ✅ 修复 PHP 环境问题：改成 Java 11 + Tomcat 9
+      // ✅ Step 1: 清除旧堆栈设置（移除 PHP）
+      sh """
+        az webapp config set \
+          -g ${resourceGroup} \
+          -n ${webAppName} \
+          --startup-file ""
+      """
+
+      // ✅ Step 2: 设置为 Tomcat + Java 11
       sh """
         az webapp config set \
           -g ${resourceGroup} \
@@ -50,7 +57,7 @@ node {
           --linux-fx-version "TOMCAT|9.0-java11"
       """
 
-      // ✅ 部署 WAR 文件
+      // ✅ Step 3: 部署 WAR 文件
       sh """
         az webapp deploy \
           --resource-group ${resourceGroup} \
@@ -59,10 +66,11 @@ node {
           --type war
       """
 
-      // ✅ 登出
+      // ✅ Step 4: 登出 Azure
       sh 'az logout'
     }
   }
 }
+
 
 
