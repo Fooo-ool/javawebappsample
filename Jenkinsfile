@@ -32,7 +32,7 @@ node {
     sh """
       az webapp deploy \
         --resource-group jenkins-get-started-rg \
-        --name rongtian-cc8-app \
+        --name jiajin-cc8 \
         --src-path target/calculator-1.0.war \
         --type war
     """
