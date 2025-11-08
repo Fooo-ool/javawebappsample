@@ -9,7 +9,7 @@ stage('deploy') {
     '''
   }
 
-  // ✅ 修改运行环境为 Tomcat 9 + Java 11
+  // ✅ 修复 PHP 环境问题，设置为 Tomcat + Java 11
   sh """
     az webapp config set \
       -g ${resourceGroup} \
